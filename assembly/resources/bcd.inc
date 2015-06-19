@@ -1,5 +1,6 @@
 
 #ifdef IMPL_BINTOBCD8S
+
                 ;
                 ; proc BinToBcd8S - (Binary to BCD  8 bit signed)
                 ;       descr:  encode a 8 bit signed value to BCD format 
