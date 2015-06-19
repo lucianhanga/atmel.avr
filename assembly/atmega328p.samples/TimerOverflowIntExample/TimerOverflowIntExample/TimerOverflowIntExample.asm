@@ -14,7 +14,7 @@
 counter:        .byte           1                       ; alloc 1 byte for the counter
 seconds:        .byte           1                       ; alloc 1 byte for seconds
 minutes:        .byte           1                       ; alloc 1 byte for minutes
-                .cseg
+                .cseg           
                 ; define the interrupt table
                 .org    0               jmp     start
                 .org    OVF1addr        jmp     OVF1vec
@@ -74,8 +74,8 @@ start:          ; program start and the interupt vector for RESET
                 sleep                                   ; sleep and wait for the interrupt to happen
 end:            rjmp            end                     ; inifinite loop
 
-OVF1vec:       ; timer/counter1 OVerFlow routine       call from IntVector     (3cycles)
-                pushSREG                                ; save the SREG         (3cycles)
+OVF1vec:       ; timer/counter1 OVerFlow routine       
+                pushSREG                                ; save the SREG
                 push            r20                     ; save the r20
 
                 lds             r20, counter            ; load the counter from memory
@@ -104,5 +104,5 @@ OVF1vec_E20:    eor             r20,r20                 ; reset the seconds
                 sts             minutes, r20            ; store them back
                                 
 OVF1vec_exit:   pop             r20                     ; restore r20
-                popSREG                                 ; restore the SREG      (3cycles)
-                reti                                    ; return from interrupt (2cycles)
+                popSREG                                 ; restore the SREG
+                reti                                    ; return from interrupt
