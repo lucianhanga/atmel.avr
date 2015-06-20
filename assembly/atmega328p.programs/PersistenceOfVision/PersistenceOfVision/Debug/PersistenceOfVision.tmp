@@ -1,0 +1,38 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.1.57</VERSION>
+ <DEVICE>"ATmega328P"</DEVICE>
+ <WORKING_DIR>C:\Users\Lucian Hanga\Desktop\lgit\atmel.avr\assembly\atmega328p.programs\PersistenceOfVision\PersistenceOfVision\Debug</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>../../../../resources</DIR>
+  <DIR>C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include</DIR>
+  <DIR></DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>C:\Users\Lucian Hanga\Desktop\lgit\atmel.avr\assembly\atmega328p.programs\PersistenceOfVision\PersistenceOfVision\PersistenceOfVision.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1175\avrassembler\Include\m328Pdef.inc</FILE>
+  <FILE>../../../../resources\stack.inc</FILE>
+  <FILE>../../../../resources\util.inc</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>C:\Users\Lucian Hanga\Desktop\lgit\atmel.avr\assembly\atmega328p.programs\PersistenceOfVision\PersistenceOfVision\Debug/PersistenceOfVision.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>PersistenceOfVision.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>PersistenceOfVision.map</FILE>
+  <FILE>PersistenceOfVision.lss</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <start><FILE>C:\Users\Lucian Hanga\Desktop\lgit\atmel.avr\assembly\atmega328p.programs\PersistenceOfVision\PersistenceOfVision\PersistenceOfVision.asm</FILE><LINE>58</LINE></start>
+  <infinite_loop><FILE>C:\Users\Lucian Hanga\Desktop\lgit\atmel.avr\assembly\atmega328p.programs\PersistenceOfVision\PersistenceOfVision\PersistenceOfVision.asm</FILE><LINE>62</LINE></infinite_loop>
+  <line0><FILE>C:\Users\Lucian Hanga\Desktop\lgit\atmel.avr\assembly\atmega328p.programs\PersistenceOfVision\PersistenceOfVision\PersistenceOfVision.asm</FILE><LINE>75</LINE></line0>
+  <text_loop><FILE>C:\Users\Lucian Hanga\Desktop\lgit\atmel.avr\assembly\atmega328p.programs\PersistenceOfVision\PersistenceOfVision\PersistenceOfVision.asm</FILE><LINE>64</LINE></text_loop>
+  <text_loop_end><FILE>C:\Users\Lucian Hanga\Desktop\lgit\atmel.avr\assembly\atmega328p.programs\PersistenceOfVision\PersistenceOfVision\PersistenceOfVision.asm</FILE><LINE>71</LINE></text_loop_end>
+  <__delay_ms><FILE>C:\Users\Lucian Hanga\Desktop\lgit\atmel.avr\assembly\atmega328p.programs\PersistenceOfVision\PersistenceOfVision\PersistenceOfVision.asm</FILE><LINE>82</LINE></__delay_ms>
+  <end><FILE>C:\Users\Lucian Hanga\Desktop\lgit\atmel.avr\assembly\atmega328p.programs\PersistenceOfVision\PersistenceOfVision\PersistenceOfVision.asm</FILE><LINE>72</LINE></end>
+  <line1><FILE>C:\Users\Lucian Hanga\Desktop\lgit\atmel.avr\assembly\atmega328p.programs\PersistenceOfVision\PersistenceOfVision\PersistenceOfVision.asm</FILE><LINE>76</LINE></line1>
+  <__delay_ms_E20><FILE>C:\Users\Lucian Hanga\Desktop\lgit\atmel.avr\assembly\atmega328p.programs\PersistenceOfVision\PersistenceOfVision\PersistenceOfVision.asm</FILE><LINE>84</LINE></__delay_ms_E20>
+  <__delay_ms_end><FILE>C:\Users\Lucian Hanga\Desktop\lgit\atmel.avr\assembly\atmega328p.programs\PersistenceOfVision\PersistenceOfVision\PersistenceOfVision.asm</FILE><LINE>92</LINE></__delay_ms_end>
+ </LABELS>
+</ASSEMBLER_INFO>
