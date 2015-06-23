@@ -58,14 +58,18 @@ start:          ; program start (and the interrupt vector for RESET)
 ;   0    1      Any logical change on INT0 generates an interrupt req.
 ;   1    0      The falling edge of INT0 generates an interrupt req.
 ;   1    1      The rising edge of INT0 generates an interrupt req.
-                 lds             r20, EICRA              ; load the External Int Control Reg A
-                 andi            r20,~(1<<ISC01|1<<ISC00); low level of pin INT0 generates intr
+;
+; IMPORTANT: EIMSK is in the I/O range (0x00 - 0x3F) should be addressed with out/in.
+;                  To address them with lds/sts: 0x20 should be added to the value of the I/O reg.
+;            EICRA is Memory Mapped and should be addressed with lds/sts
+;
+                 ldi             r20, 1 << ISC00         ; trigger ANY logic change 
                  sts             EICRA, r20              ; store the value in the EICRA 
-                 lds             r20, EIMSK              ; load the External Interrupt MaSK reg
+                 in              r20, EIMSK              ; load the External Interrupt MaSK reg
                  ori             r20, 1 << INT0          ; enable INT0
-                 sts             EIMSK, r20              ;
+                 out             EIMSK, r20              ; write back the EIMSK
                  cbi             DDRD, DDD2              ; setup pin PD2 for input in Port D
-;                 sbi             PORTD, PORTD2           ; enable pull-up on PD2
+                 sbi             PORTD, PORTD2           ; enable pull-up on PD2
                  sei                                     ; ebable interrupts
 
 inf_loop:       in              r20, PIND

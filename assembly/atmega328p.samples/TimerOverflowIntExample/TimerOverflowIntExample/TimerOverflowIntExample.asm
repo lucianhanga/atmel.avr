@@ -6,6 +6,11 @@
 ;                CKDIV8 = [X]
 ;                SUT_CKSEL = INTRCOSC_8MHZ_6CK_14CK_65MS
 ;
+;       IMPORTANT:
+;         Timer/Counter0  I/O registers: OCR0B, OCR0A, TCNT0, TCCR0B, TCCR0A are in the in/out range
+;         Timer/Counter1,2 are in the Extended I/O space and have to be addressed using lds/sts
+;               
+
 
                 .include        "stack.inc"             ; include the stack macros
 
