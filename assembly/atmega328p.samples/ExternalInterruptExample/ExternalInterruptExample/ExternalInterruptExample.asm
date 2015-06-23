@@ -48,9 +48,8 @@ start:          ; program start (and the interrupt vector for RESET)
                 initStk                                 ; init the stack
                 ; prepare the LED driving
                  sbi             DDRC, DDC5              ; setup PC5 (PortC) for output (temporary)
-                 cbi             PORTC, PORTC5           ; low signal on pin PDC        (temporary)
-                 sbi             DDRC, DDC4
-                 cbi             PORTC, PORTC4
+                 sbi             PORTC, PORTC5           ; low signal on pin PDC        (temporary)
+
                 ; setup the INT0 to fire on low level
                 cli                                     ; disable the interrupts
 ; ISC01 ISC00
@@ -63,7 +62,7 @@ start:          ; program start (and the interrupt vector for RESET)
 ;                  To address them with lds/sts: 0x20 should be added to the value of the I/O reg.
 ;            EICRA is Memory Mapped and should be addressed with lds/sts
 ;
-                 ldi             r20, 1 << ISC00         ; trigger ANY logic change 
+                 ldi             r20,~(1<<ISC01|1<<ISC00); trigger on low signal
                  sts             EICRA, r20              ; store the value in the EICRA 
                  in              r20, EIMSK              ; load the External Interrupt MaSK reg
                  ori             r20, 1 << INT0          ; enable INT0
@@ -71,14 +70,6 @@ start:          ; program start (and the interrupt vector for RESET)
                  cbi             DDRD, DDD2              ; setup pin PD2 for input in Port D
                  sbi             PORTD, PORTD2           ; enable pull-up on PD2
                  sei                                     ; ebable interrupts
-
-inf_loop:       in              r20, PIND
-                andi            r20, 1 << PIND2
-                brne            inf_loop_E10
-                sbi             PORTC, PORTC4
-                rjmp            inf_loop
-inf_loop_E10:   cbi             PORTC, PORTC4
-                rjmp            inf_loop
 end:            rjmp    end
 
 INT0vec:        ; Extern Interrupt INT0 routine
@@ -88,8 +79,10 @@ INT0vec:        ; Extern Interrupt INT0 routine
                 lds             r20, counter            ; increment the counter
                 inc             r20                     ;
                 sts             counter, r20            ;
-                sbi             PORTC, PORTC5           ; toggle the LED (temporary)
-                
+                sbi             PINC, PINC5             ; toggle the LED (temporary)
+INT0vec_E10:    in              r20, PIND               ; wait if the button is down
+                andi            r20, 1 << PIND2         ; until the the button is released
+                breq            INT0vec_E10             ; (however this is not debouncing)
                 pop             r20                     ; restore registers
                 popSREG                                 ; restore the SREG
                 reti                                    ; return from interrupt
