@@ -12,17 +12,17 @@
 ;                                         _______  _______
 ;                     Reset-PCINT14-PC6 -| 1            28|- PC5-PCINT13-ADC5-A5|A5-SCL
 ;LED10<---           0--RXD-PCINT16-PD0 -| 2            27|- PC4-PCINT12-ADC4-A4|A5-SDA 
-;LED10<--            1--TXD-PCINT17-PD1 -| 3            26|- PC3-PCINT11-ADC3-A3|A5
-;LED10<--            2-INT0-PCINT18-PD2 -| 4            25|- PC2-PCINT10-ADC2-A2|A5
-;LED10<--   OC2B-PWM-3-INT1-PCINT19-PD3 -| 5            24|- PC1-PCINT9--ADC1-A1|A5
-;                T0--4-XCK--PCINT20-PD4 -| 6            23|- PC0-PCINT8--ADC0-A0|A5
+;LED11<--            1--TXD-PCINT17-PD1 -| 3            26|- PC3-PCINT11-ADC3-A3|A5
+;LED12<--            2-INT0-PCINT18-PD2 -| 4            25|- PC2-PCINT10-ADC2-A2|A5
+;LED13<--   OC2B-PWM-3-INT1-PCINT19-PD3 -| 5            24|- PC1-PCINT9--ADC1-A1|A5
+;LED14<--        T0--4-XCK--PCINT20-PD4 -| 6            23|- PC0-PCINT8--ADC0-A0|A5
 ;                                   VCC -| 7            22|- GND
 ;                                   GND -| 8            21|- AREF
 ;LED06<---       OSC1-XTAL1-PCINT6--PB6 -| 9            20|- VCC
 ;LED07<---       OSC2-XTAL2-PCINT7--PB7 -|10            19|- PB5-PCINT5------13-----SCK    --->LED05
-;LED10<--   OC0B-PWM-5--T1--PCINT21-PD5 -|11            18|- PB4-PCINT4------12-----MISO   --->LED04
-;LED10<--   OC0A-PWM-6-AIN0-PCINT22-PD6 -|12            17|- PB3-PCINT3-OC2A-11-PWM-MOSI   --->LED03
-;LED10<--            7-AIN1-PCINT23-PD7 -|13            16|- PB2-PCINT2-OC1B-10-PWM-SS     --->LED02
+;LED15<--   OC0B-PWM-5--T1--PCINT21-PD5 -|11            18|- PB4-PCINT4------12-----MISO   --->LED04
+;LED16<--   OC0A-PWM-6-AIN0-PCINT22-PD6 -|12            17|- PB3-PCINT3-OC2A-11-PWM-MOSI   --->LED03
+;LED17<--            7-AIN1-PCINT23-PD7 -|13            16|- PB2-PCINT2-OC1B-10-PWM-SS     --->LED02
 ;LED00<--       ICP1-8-CLK0-PCINT0--PB0 -|14            15|- PB1-PCINT1-OC1A--9-PWM        --->LED01
 ;                                        ------------------
 
@@ -35,8 +35,8 @@
                 push            r24
                 push            r25
                 push            r16
-                ldi             r20, LOW(@0)
-                ldi             r21, HIGH(@0)
+                ldi             r24, LOW(@0)
+                ldi             r25, HIGH(@0)
                 call            __delay_ms
                 pop             r16
                 pop             r25
@@ -53,12 +53,57 @@
                 ; end of interrupt vectors
                 .org            INT_VECTORS_SIZE
                 ; defintions which are going to be used during the program
-                .equ            LED_ROW_0 = PORTB
                 .equ            LED_ROW_1 = PORTD
+                .equ            LED_ROW_2 = PORTB
 start:          ; program start (the vector for the RESET interrupt)
                 ldi             r20, 0xFF               ; 
                 out             DDRB, r20               ; configure the port B for output
                 out             DDRD, r20               ; configure the port D for output
+                ; do the system check
+                ldi             r20, 1                  ; light up each LED from ROW 1 once
+                eor             r21, r21
+e10:            delay_ms        100
+                out             LED_ROW_1, r20
+                delay_ms        100
+                out             LED_ROW_1, r21
+                lsl             r20
+                brne            e10
+                ldi             r20, 1
+e20:            delay_ms        100                     ; light up each LED from ROW 2 once
+                out             LED_ROW_2, r20
+                delay_ms        100
+                out             LED_ROW_2, r21
+                lsl             r20
+                brne            e20
+                .equ            DELAY_POW = 2
+e30:            ldi             r20, 0x7F
+                out             LED_ROW_1, r20
+                delay_ms        DELAY_POW
+                ldi             r20, 0x41
+                out             LED_ROW_1, r20
+                ldi             r20, 0x41
+                delay_ms        DELAY_POW
+                out             LED_ROW_1, r20
+                ldi             r20, 0x41
+                delay_ms        DELAY_POW
+                out             LED_ROW_1, r20
+                ldi             r20, 0x3e
+                delay_ms        DELAY_POW
+                out             LED_ROW_1, r20
+                ldi             r20, 0x00
+                delay_ms        DELAY_POW
+                out             LED_ROW_1, r20
+                ldi             r20, 0x00
+                delay_ms        DELAY_POW
+                out             LED_ROW_1, r20
+                ldi             r20, 0x00
+                delay_ms        DELAY_POW
+                out             LED_ROW_1, r20
+                ldi             r20, 0x00
+                delay_ms        DELAY_POW
+                rjmp            e30
+
+/*
 infinite_loop:                                          ; infinite loop which displays the text
                 ldZcseg         line0                   ;  initialize Z pointer with text1
 text_loop:      lpm             r20, Z+                 ;  load a character and inc the pointer Z
@@ -69,6 +114,8 @@ text_loop:      lpm             r20, Z+                 ;  load a character and 
                 ; delay 20ms
                 ; while r20 !=0 
 text_loop_end:  rjmp            infinite_loop           ; close the infinite loop 
+
+*/
 end:            rjmp            end
 
                 ; data definition in the .cseg

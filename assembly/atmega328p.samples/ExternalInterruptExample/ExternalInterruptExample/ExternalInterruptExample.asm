@@ -47,8 +47,10 @@ counter:        .byte           1                       ; counter of the interru
 start:          ; program start (and the interrupt vector for RESET)
                 initStk                                 ; init the stack
                 ; prepare the LED driving
-                sbi             DDRC, DDC5              ; setup PD2 (PortD) for output (temporary)
-                cbi             DDRC, PORTC5            ; low signal on pin PD2        (temporary)
+                 sbi             DDRC, DDC5              ; setup PC5 (PortC) for output (temporary)
+                 cbi             PORTC, PORTC5           ; low signal on pin PDC        (temporary)
+                 sbi             DDRC, DDC4
+                 cbi             PORTC, PORTC4
                 ; setup the INT0 to fire on low level
                 cli                                     ; disable the interrupts
 ; ISC01 ISC00
@@ -56,15 +58,23 @@ start:          ; program start (and the interrupt vector for RESET)
 ;   0    1      Any logical change on INT0 generates an interrupt req.
 ;   1    0      The falling edge of INT0 generates an interrupt req.
 ;   1    1      The rising edge of INT0 generates an interrupt req.
-                lds             r20, EICRA              ; load the External Int Control Reg A
-                andi            r20,~(1<<ISC01|1<<ISC00); low level of pin INT0 generates intr
-                sts             EICRA, r20              ; store the value in the EICRA 
-                lds             r20, EIMSK              ; load the External Interrupt MaSK reg
-                ori             r20, 1 << INT0          ; enable INT0
-                sts             EIMSK, r20              ;
-                cbi             DDRD, DDD2              ; setup pin PD2 for input in Port D
-                cbi             PORTD, PORTD2           ; enable pull-up on PD2
-                sei                                     ; ebable interrupts
+                 lds             r20, EICRA              ; load the External Int Control Reg A
+                 andi            r20,~(1<<ISC01|1<<ISC00); low level of pin INT0 generates intr
+                 sts             EICRA, r20              ; store the value in the EICRA 
+                 lds             r20, EIMSK              ; load the External Interrupt MaSK reg
+                 ori             r20, 1 << INT0          ; enable INT0
+                 sts             EIMSK, r20              ;
+                 cbi             DDRD, DDD2              ; setup pin PD2 for input in Port D
+;                 sbi             PORTD, PORTD2           ; enable pull-up on PD2
+                 sei                                     ; ebable interrupts
+
+inf_loop:       in              r20, PIND
+                andi            r20, 1 << PIND2
+                brne            inf_loop_E10
+                sbi             PORTC, PORTC4
+                rjmp            inf_loop
+inf_loop_E10:   cbi             PORTC, PORTC4
+                rjmp            inf_loop
 end:            rjmp    end
 
 INT0vec:        ; Extern Interrupt INT0 routine
@@ -74,7 +84,7 @@ INT0vec:        ; Extern Interrupt INT0 routine
                 lds             r20, counter            ; increment the counter
                 inc             r20                     ;
                 sts             counter, r20            ;
-                sbi             PINC, PINC0             ; toggle the LED (temporary)
+                sbi             PORTC, PORTC5           ; toggle the LED (temporary)
                 
                 pop             r20                     ; restore registers
                 popSREG                                 ; restore the SREG
