@@ -70,7 +70,7 @@ start:          ; program start (and the interrupt vector for RESET)
                  cbi             DDRD, DDD2              ; setup pin PD2 for input in Port D
                  sbi             PORTD, PORTD2           ; enable pull-up on PD2
                  sei                                     ; ebable interrupts
-end:            rjmp    end
+end:             rjmp            end
 
 INT0vec:        ; Extern Interrupt INT0 routine
                 pushSREG                                ; save the SREG

@@ -106,8 +106,7 @@ OVF1vec_E20:    eor             r20,r20                 ; reset the seconds
                 sts             seconds, r20            ; store it back
                 lds             r20, minutes            ; load the minutes from memory
                 inc             r20                     ; update the minutes
-                sts             minutes, r20            ; store them back
-                                
+                sts             minutes, r20            ; store them back                
 OVF1vec_exit:   pop             r20                     ; restore r20
                 popSREG                                 ; restore the SREG
                 reti                                    ; return from interrupt

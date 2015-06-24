@@ -1,3 +1,4 @@
+;--------10--------20--------30--------40--------50--------60--------70--------80--------90------100
                 ;
                 ; macro initStk
                 ;       descr:  initialize the stack
@@ -6,7 +7,7 @@
                 ;       alters: r16, SPL, SPH
                 ;
                 .macro          initStk
-                ldi             r16, low(RAMEND)                ; load the RAMEND in the StackPointer
+                ldi             r16, low(RAMEND)                ; load the RAMEND in theStackPointer
                 out             SPL, r16                        ; --
                 ldi             r16, high(RAMEND)               ; --
                 out             SPH, r16                        ; --
