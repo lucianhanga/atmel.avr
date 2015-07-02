@@ -53,7 +53,6 @@
 ;    NB !always check where are your I/O Registers!
 ;
 
-
                 .include        "stack.inc"
                 ; define the interrupt table
                 .org    0               jmp     start   ; RESET interrupt routine
@@ -111,20 +110,21 @@ start:          ; program start and the RESET interrupt vector
                 ;   1      0     Clear OC0A on Compare Match, set OC0A at BOTTOM (non-inverting)
                 ;   1      1     Set OC0A on Compare Match, clear OC0A at BOTTOM (inverting mode)
                 ; 
-                ;  CS02:0    <---  0 0 1 (clkI/O no prescaling)
-                ;  WGM02:0   <---  1 1 1 (Fast PWM mode)
+                ;  CS02:0    <---  1 0 1 (clkI/O  1024 prescaling)
+                ;  WGM02:0   <---  0 1 1 (Fast PWM mode)
                 ;  COM0A1:0  <---  1 0   (clear OC0A on compare match, set at BOTTOM)
                 ;
-                ldi             r20, 1 << CS00 | 1 << WGM02
+                ldi             r20, 1 << CS02 | 1 << CS00
                 out             TCCR0B, r20                         
                 ldi             r20, 1 << COM0A1 | 1 << WGM01 | 1 << WGM00 
                 out             TCCR0A, r20                
+                ldi             r20, 0x80               ; puls width <- 0x80 ( duty cycle = 50%)
+                out             OCR0A, r20              ;
+                in              r21, OCR0A 
                 ; enable the interrupt(s)
-                ldi             r20, 1 << TOIE0 | 1 << OCIE0A
+                ldi             r20, 1 << TOIE0 | 1 << OCIE0A 
                 sts             TIMSK0, r20             ;
-                ldi             r20, 128                ; puls width <- 128 ( duty cycle = 50%)
-                out             OCR0A, r20              ; 
-                sei                                     ; enable interrupts
+                sei                                     ; enable interrupt
 end:            rjmp            end                     ; infinite loop at the end of the programm
 
 
@@ -133,3 +133,4 @@ OVF0vec:        ; interrupt vector for the OVF0 interrupt
 
 OC0Avec:        ; interrupt vector for the OC0A interrupt
                 reti
+
