@@ -29,7 +29,7 @@
 ;       CKDIV8 = [X]
 ;       SUT_CKSEL = INTRCOSC_8MHZ_6CK_14CK_65MS
 ;
-;; atmega328p pinout
+; atmega328p pinout
 ;                                       _______  _______
 ;                   Reset-PCINT14-PC6 -| 1            28|- PC5-PCINT13-ADC5-A5|A5-SCL 
 ;                  0--RXD-PCINT16-PD0 -| 2            27|- PC4-PCINT12-ADC4-A4|A5-SDA 
