@@ -59,6 +59,7 @@ counter:        .byte           1                       ; define a byte counter 
                 .org    0               jmp start       ; program start (Reset Interrupt Vector)
                 .org    PCI0addr        jmp PCI0vec     ; PCI0 Interrupt Vector
 
+                .org    INT_VECTORS_SIZE
 start:                                                  ; programm begin
                 cli                                     ; disable all the interrupts
                 initStk                                 ; initialize the stack

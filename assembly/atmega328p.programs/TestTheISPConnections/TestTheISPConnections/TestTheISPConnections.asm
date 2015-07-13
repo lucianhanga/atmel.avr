@@ -7,6 +7,11 @@
 ; For programm testing was used also the circuit presented in the folder:
 ; atmel.avr\assembly\atmega328p.programs\PersistenceOfVision
 ;
+;   For this example to work accurately, setup the Fuse to 1Mb Frequency:
+;       CKDIV8 = [X]
+;       SUT_CKSEL = INTRCOSC_8MHZ_6CK_14CK_65MS
+;
+;
 ; atmega328p pinout
 ;                                       _______  _______
 ;                   Reset-PCINT14-PC6 -| 1            28|- PC5-PCINT13-ADC5-A5|A5-SCL  <--- LED
@@ -25,4 +30,50 @@
 ;             ICP1-8-CLK0-PCINT0--PB0 -|14            15|- PB1-PCINT1-OC1A--9-PWM
 ;                                      ------------------
 ;
+;
+                .include        "stack.inc"
+
+
+                .macro          delay_ms
+                pushSREG
+                push            r24
+                push            r25
+                push            r16
+                ldi             r24, LOW(@0)
+                ldi             r25, HIGH(@0)
+                call            __delay_ms
+                pop             r16
+                pop             r25
+                pop             r24
+                popSREG
+                .endmacro
+
+                .cseg
+                .org    0       rjmp    start
+
+                .org    INT_VECTORS_SIZE
+start:          initStk                                 ; initialize the stack for proc calls
+                ldi             r20, 1 << DDC5          ; setup the C5 PIN for output
+                out             DDRC, r20
+
+repeat_toggle:  sbi             PINC, PINC5             ; toggle the value of the PIN C5
+                delay_ms        1000
+                rjmp            repeat_toggle
+
+end:            rjmp            end
+
+;
+;
+;
+__delay_ms:     ; delay milliseconds routine
+                ldi             r16,200                 ; 7*142 cycles -1       = 993 cycles
+__delay_ms_E20: push            r30                     ;   2 cycles
+                pop             r30                     ;   2 cycles
+                dec             r16                     ;   1 cycle
+                brne            __delay_ms_E20          ;   2 cycle (1cycle)
+                push            r30                     ;   2 cycles
+                pop             r30                     ;   2 cycles            = 993+4=997 cycles
+                sbiw            r25:r24, 1              ;   2 cycles
+                brne            __delay_ms              ;   2 cycles (1cycle)
+__delay_ms_end: ret                                     ;   4 cycles
 
