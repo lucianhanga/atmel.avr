@@ -119,7 +119,7 @@ text_loop_end:  rjmp            infinite_loop           ; close the infinite loo
 end:            rjmp            end
 
                 ; data definition in the .cseg
-line0:          .db             "Daniel Hanga", 0x00, 0x00
+line0:          .db             "Testing Test", 0x00, 0x00
 line1:          .db             "ist die Beste", 0x00
 
 
